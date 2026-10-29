@@ -1,0 +1,21 @@
+const int pwmPin = 4;  // to GPIO 4
+
+void setup() {
+  // set the LED as an output
+  pinMode(pwmPin, OUTPUT);
+}
+
+void loop(){
+  // increase
+  for(int dutyCycle = 0; dutyCycle <= 255; dutyCycle++){   
+    // changing the LED brightness with PWM
+    analogWrite(pwmPin, dutyCycle);
+    delay(15);
+  }
+
+  // decrease 
+  for(int dutyCycle = 255; dutyCycle >= 0; dutyCycle--){
+    analogWrite(pwmPin, dutyCycle);
+    delay(15);
+  }
+}

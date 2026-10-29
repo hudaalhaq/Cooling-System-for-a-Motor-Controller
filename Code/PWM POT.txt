@@ -1,0 +1,26 @@
+const int potPin = 34;      // Pin analog untuk potensiometer
+const int ledPin = 27;       // Pin PWM untuk LED (misal: 3, 5, 6, 9, 10, 11 di UNO)
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  // Baca nilai dari potensiometer (0 - 1023)
+  int potValue = analogRead(potPin);
+
+  // Konversi ke 0 - 255 untuk PWM
+  int pwmValue = map(potValue, 0, 1023, 0, 255);
+
+  // Tulis nilai PWM ke LED
+  analogWrite(ledPin, pwmValue);
+
+  // Cetak ke Serial Monitor (opsional)
+  Serial.print("Potensio: ");
+  Serial.print(potValue);
+  Serial.print("  => PWM: ");
+  Serial.println(pwmValue);
+
+  delay(10);
+}

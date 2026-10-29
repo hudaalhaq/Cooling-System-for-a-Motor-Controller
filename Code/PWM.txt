@@ -1,0 +1,66 @@
+#include <Arduino.h>
+
+
+int pwm1 = 9;
+int pwmChannel = 0; // PWM channel
+
+int pwmFreq = 5000; // PWM frequency in Hz
+
+int pwmResolution = 8; // PWM resolution (8-bit: 0-255)
+
+int pwmval = 0;    // Initial PWM 
+
+value
+bool increasing = true; // Direction of PWM 
+
+change
+
+void setup() {
+
+  Serial.begin(9600);
+
+//.............Configure PWM on ESP32....................
+
+  ledcSetup(pwmChannel, pwmFreq, pwmResolution); // Set up PWM channel
+
+  ledcAttachPin(pwm1, pwmChannel);               // Attach pin to PWM channel
+
+}
+
+
+
+void loop() {
+
+  if (increasing) {
+
+    pwmval += 5;                    // Increase PWM value by 5
+
+    if (pwmval >= 255) {
+
+      pwmval = 255;
+
+      increasing = false;
+    }
+
+  }
+
+ else {
+
+    pwmval -= 5;                    // Decrease PWM value by 5
+
+    if (pwmval <= 0) {
+
+      pwmval = 0;
+      increasing = true;
+
+    }
+
+  }
+
+
+
+  ledcWrite(pwmChannel, pwmval);    // Apply PWM value to the pin
+
+  Serial.println(pwmval);
+  delay(100);
+}

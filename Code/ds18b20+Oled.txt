@@ -1,0 +1,47 @@
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+const int oneWireBus = 1;
+
+OneWire oneWire(oneWireBus);
+DallasTemperature sensors(&oneWire);
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define SSD1306_I2C_ADDRESS 0x3C
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  Serial.begin(9600);
+  sensors.begin();
+  if (!display.begin(SSD1306_I2C_ADDRESS, 0x3C)) {
+    Serial.println("Gagal menginisialisasi OLED!");
+    for (;;);
+  }
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("Inisialisasi...");
+  display.display();
+  delay(1000);
+}
+
+void loop() {
+  sensors.requestTemperatures();
+  float temperatureC = sensors.getTempCByIndex(0);
+  Serial.print(temperatureC);
+  Serial.println("ºC");
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.print("Suhu: ");
+  display.print(temperatureC);
+  display.println(" ºC");
+  display.setTextSize(1);
+  display.display();
+  delay(500);
+}

@@ -1,0 +1,23 @@
+#include <Arduino.h>
+
+const int sensorPin = 34;
+const float referenceVoltage = 5;// Tegangan referensi ADC ESP32
+const float sensitivity = 0.0075; // 7.5mV per Ampere
+const float zeroCurrentVoltage = referenceVoltage / 2; // Tegangan saat arus 0A
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(sensorPin, INPUT);
+}
+
+void loop() {
+  int rawValue = analogRead(sensorPin);  
+  float voltage = (rawValue / 4095.0) * referenceVoltage;
+  float current = (voltage - zeroCurrentVoltage) / sensitivity;
+  Serial.print("Tegangan: ");
+  Serial.print(voltage, 2);
+  Serial.print(" V, Arus: ");
+  Serial.print(current, 2);
+  Serial.println(" A");
+  delay(500);
+}

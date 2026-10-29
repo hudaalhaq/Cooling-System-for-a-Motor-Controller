@@ -1,0 +1,28 @@
+//link google spreadsheet
+//https://docs.google.com/spreadsheets/d/1DfH7z7zi7Y6llctTQZ9xY0Qd9zLz9yhA0aPqOYFDGsM/edit?gid=0#gid=0
+
+function doPost(e) {
+  // Parse data yang diterima dari ESP32
+  var data;
+  try {
+    data = JSON.parse(e.postData.contents);
+  } catch (err) {
+    return ContentService.createTextOutput("Invalid JSON").setMimeType(ContentService.MimeType.TEXT);
+  }
+
+  // Ambil Spreadsheet
+  var spreadsheet = SpreadsheetApp.openById("1DfH7z7zi7Y6llctTQZ9xY0Qd9zLz9yhA0aPqOYFDGsM"); // Ganti dengan Spreadsheet ID Anda
+  var sheet = spreadsheet.getSheetByName("Sheet1");
+
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet("Sheet1");
+    sheet.appendRow(["Timestamp", "Temperature (°C)", "Current (mA)", "Power (mW)"]);
+  }
+
+  // Tambahkan data ke baris berikutnya
+  var timestamp = new Date();
+  sheet.appendRow([timestamp, data.temperatureC, data.current_mA, data.power_mW]);
+
+  // Return response
+  return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
+}
